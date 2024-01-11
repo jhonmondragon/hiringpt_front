@@ -1,0 +1,29 @@
+.container-sidebar{
+    background-color: #F3F4F6;
+    width: 15%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.container-sidebar-options{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.opt-bottom{
+    text-decoration: none;
+    width: 10vw;
+    text-align: center;
+    font-weight: 600;
+    margin-bottom: 20px;
+    padding: 10px;
+    border-radius: 5px;
+    color: #1F2937;
+}
+.opt-bottom:hover{
+    background-color: #E5E7EB;
+}
