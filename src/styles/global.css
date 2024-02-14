@@ -462,7 +462,6 @@ body{
     left: 0;
     right: 0;
     z-index: 1000; /* Ajusta la propiedad z-index según sea necesario */
-    padding: 10px;
     display: flex;
     justify-content: space-around;
     align-items: center;

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext.js";
 import '../styles/buttons/buttonLogin.css';
@@ -44,13 +44,29 @@ function Login(){
                     'Authorization': `Bearer ${idToken}`
                 }
             });
+
             const response_login = await response_endpoint_login.text()
             const status_code = response_endpoint_login.status
-            navigate('/interviews')
+
+            if (status_code == 200){
+                navigate('/interviews')
+            }
+
+            if (response_login == 'user not found'){
+                alertError('Error al iniciar sesion','El usuario no existe, por favor registrate')
+            }
+            if (response_login == 'user blocked'){
+                alertError('Error al iniciar sesion','Por favor contactate con el administrador de tu empresa')
+            }
+
         }catch(error){
             alertError('Error al iniciar sesion','Se presento un error, por favor vuelve a intentar o contacta a soporte')
         }
     }
+
+    useEffect(() => {
+        document.title = 'Iniciar sesion';
+    },[]);
 
 
     return(

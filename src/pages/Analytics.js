@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useAuth } from '../context/AuthContext'; // metodos de authentication
 import TableAnalytics from '../components/Analitics/Table.js'
 import CounterInterviewResponses from '../components/Analitics/CounterInterviewResponses.js'
 import { useParams } from 'react-router-dom';
@@ -10,7 +11,7 @@ import Swal from 'sweetalert2'; // libreria de errores
 const Analitics = () => {
 
     const { process_id } = useParams();
-    const token = sessionStorage.getItem('id_token'); // Obtener el token desde sessionStorage
+    const { refreshToken } = useAuth(); // metodo para refrescar el token de auth
 
     //Trae la informacion del proceso
     const [infoProcess, setInfoProcess] = useState({}) // informacion del proceso
@@ -25,6 +26,9 @@ const Analitics = () => {
 
     const getInfoProcess = async () => {
         try{
+
+            const token = sessionStorage.getItem('id_token'); // Obtener el token desde sessionStorage
+
             const myHeaders = new Headers();
             myHeaders.append('accept', 'application/json');
             myHeaders.append('Authorization', `Bearer ${token}`);
@@ -36,6 +40,16 @@ const Analitics = () => {
             const response = await fetch(
                 config.apiUrl + config.listInfoProcessUrl + process_id, requestOptions
             )
+
+            if(response.status == 401){
+                try{
+                    const new_id_token = await refreshToken()
+                    sessionStorage.setItem('id_token', new_id_token);
+                    await getInfoProcess()
+                }catch (error){
+                    AlertError('Error','Se presento un error, por favor vuelve a intentar o contacta a soporte')
+                }
+            }
             const jsonData = await response.json()
 
             setInfoProcess(jsonData)

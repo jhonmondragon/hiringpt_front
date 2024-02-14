@@ -11,12 +11,14 @@ import { config } from '../config.js'; // link de endpoints
 import * as XLSX from 'xlsx/xlsx.mjs'; // para procesar excel
 import AlertError from '../components/Alert/AlertError.js';
 import AlertConfirm from '../components/Alert/AlertConfirm.js';
+import { useAuth } from '../context/AuthContext'; // metodos de authentication
 
 
 const Deployment = () => {
     const [jsonData, setJsonData] = useState(null);
-    const token = sessionStorage.getItem('id_token'); // Obtener el token desde sessionStorage
+    
     const { id_process } = useParams(); // parametros de la url
+    const { refreshToken } = useAuth(); // metodo para refrescar el token de auth
 
     const handleFileUpload = (data) => {
         setJsonData(data);
@@ -29,6 +31,8 @@ const Deployment = () => {
     const getAllCandidates = async () => {
 
         try{
+
+            const token = sessionStorage.getItem('id_token'); // Obtener el token desde sessionStorage
 
             const myHeaders = new Headers()
             myHeaders.append('Content-Type', 'application/json');
@@ -55,7 +59,17 @@ const Deployment = () => {
                         countProcess: item.count_process
                     }]);
                 })
+            }else if(response.status == 401){
+                try{
+                    const new_id_token = await refreshToken()
+                    sessionStorage.setItem('id_token', new_id_token);
+                    await getAllCandidates()
+                }catch (error){
+                    AlertError('Error','Se presento un error, por favor vuelve a intentar o contacta a soporte')
+                }
             }
+
+
         }catch(err){
             AlertError('Error','Se presento un error, por favor vuelve a intentar o contacta a soporte')
         }
@@ -99,6 +113,8 @@ const Deployment = () => {
                     })
                 }
 
+                const token = sessionStorage.getItem('id_token'); // Obtener el token desde sessionStorage
+
                 //crea encabezados
                 const myHeaders = new Headers();
                 myHeaders.append('Content-Type', 'application/json');
@@ -124,7 +140,15 @@ const Deployment = () => {
 
                 if (response.ok) {    
                     window.location.reload();
-                } 
+                } else if(response.status == 401){
+                    try{
+                        const new_id_token = await refreshToken()
+                        sessionStorage.setItem('id_token', new_id_token);
+                        await combineData()
+                    }catch (error){
+                        AlertError('Error','Se presento un error, por favor vuelve a intentar o contacta a soporte')
+                    }
+                }
                 else {
                     AlertError('Error','Se presento un error, por favor vuelve a intentar o contacta a soporte')
                 }
@@ -139,6 +163,8 @@ const Deployment = () => {
     const handleNewCandidate = async (infoCandidate) => {
 
         try{
+
+            const token = sessionStorage.getItem('id_token'); // Obtener el token desde sessionStorage
 
             const myHeaders = new Headers;
             myHeaders.set('Accept', 'application/json')
@@ -160,11 +186,25 @@ const Deployment = () => {
                 config.apiUrl + config.createCandidateUrl,
                 requestOptions
             );
-            if (response.ok) {    
+            
+            if (response.status == 409){
+                AlertError('Error','El candidato ya se encuentra creado dentro del proceso actual')
+            }
+            else if(response.status == 401){
+                try{
+                    const new_id_token = await refreshToken()
+                    sessionStorage.setItem('id_token', new_id_token);
+                    await handleNewCandidate()
+                }catch (error){
+                    AlertError('Error','Se presento un error, por favor vuelve a intentar o contacta a soporte')
+                }
+            }
+
+            else if (response.ok) {    
                 window.location.reload();
-            } 
+            }
             else {
-                AlertError('Error','Se presento un error, por favor vuelve a intentar o contacta a soporte')
+                AlertError('Error','Debes ingresar el nombre y el correo electronico del candidato')
             }
 
         }catch(e){
@@ -177,6 +217,8 @@ const Deployment = () => {
     const handleDeleteCandidate = async (candidateId) =>{
 
         try{
+
+            const token = sessionStorage.getItem('id_token'); // Obtener el token desde sessionStorage
 
             const myHeaders = new Headers;
             myHeaders.set('Accept', 'application/json')
@@ -220,6 +262,8 @@ const Deployment = () => {
             candidates: candidates
         })
 
+        const token = sessionStorage.getItem('id_token'); // Obtener el token desde sessionStorage
+
         const myHeaders = new Headers();
             myHeaders.append('Content-Type', 'application/json');
             myHeaders.append('Authorization', `Bearer ${token}`);
@@ -246,6 +290,9 @@ const Deployment = () => {
         }
         else if(response.status === 409){
             AlertError('Error','Las entrevistas vinculadas deben tener minimo una pregunta')
+        }
+        else if (response.status === 419) {
+            AlertError('Error','El proceso no tiene entrevistas vinculadas')
         }
         else{
             AlertError('Error','Se presento un error, por favor vuelve a intentar o contacta a soporte')

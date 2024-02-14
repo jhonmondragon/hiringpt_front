@@ -26,7 +26,7 @@ const ProductSection = () => {
 
     
     return(
-        <div className="flex-center-column mg-bt-40 mg-tp-40">
+        <div className="flex-center-column mg-bt-40 mg-tp-40" id='productSection'>
             <h2>HIRINGPT es efectivo y facil de utilizar</h2>
             <p className='fw-600 fs-20' >Evalua a tus candidatos en 4 sencillos pasos</p>
             <div className='flex max-with-100vw overflow-x'>
