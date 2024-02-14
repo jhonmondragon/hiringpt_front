@@ -1,5 +1,5 @@
 const dev = {
-  apiUrl: "http://3.147.71.21:8000/",
+  apiUrl: "http://localhost:8000/",
   registerUrl: "register/", //registra un usuario
   loginUrl: "login/", // permmite logear un usuario
 

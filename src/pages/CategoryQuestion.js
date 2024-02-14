@@ -1,85 +1,119 @@
 import React, { useState, useEffect } from 'react';
+import { useAuth } from '../context/AuthContext'; // metodos de authentication
 import Sidebar from '../components/Sidebar/Sidebar';
 import CardGroup from '../components/Cards/CardGroup';
 import { config } from '../config.js'; // Configuracion de los endpoint
 import AlertError from '../components/Alert/AlertError.js';
 
 const CategoryQuestion = () => {
-    const [categorys, setCategorys] = useState([]);
-    const [isAddingCategory, setIsAddingCategory] = useState(false);
-    const [newCategoryName, setNewCategoryName] = useState('');
-    const token = sessionStorage.getItem('id_token'); // Obtener el token desde sessionStorage
-    const [categorysFilter, setCategorys_filter] = useState([]); // contiene las categorias filtradas por la barra de busqueda
+    
+  const [categorys, setCategorys] = useState([]);
+  const [isAddingCategory, setIsAddingCategory] = useState(false);
+  const [newCategoryName, setNewCategoryName] = useState('');
+  const [categorysFilter, setCategorys_filter] = useState([]); // contiene las categorias filtradas por la barra de busqueda
+  const { refreshToken } = useAuth(); // metodo para refrescar el token de auth
 
-    useEffect(() => {
-      const fetchData = async () => {
-        try {
-          // Headers de la solicitud
-          const myHeaders = new Headers();
-          myHeaders.append('accept', 'application/json');
-          myHeaders.append('Authorization', `Bearer ${token}`);
-          const requestOptions = {
-            method: 'GET',
-            headers: myHeaders,
-            redirect: 'follow',
-          };
-          const response = await fetch(
-            config.apiUrl + config.listQuestionCategoryUrl,
-            requestOptions
-          );
-          const jsonData = await response.json();
-          setCategorys(jsonData);
-          setCategorys_filter(jsonData);
-        } catch (error) {
-          AlertError('Error','Se presento un error, por favor vuelve a intentar o contacta a soporte')
-        }
+  const fetchData = async () => {
+    try {
+
+      const token = sessionStorage.getItem('id_token'); // Obtener el token desde sessionStorage
+      
+      // Headers de la solicitud
+      const myHeaders = new Headers();
+      myHeaders.append('accept', 'application/json');
+      myHeaders.append('Authorization', `Bearer ${token}`);
+      
+      const requestOptions = {
+        method: 'GET',
+        headers: myHeaders,
+        redirect: 'follow',
       };
-      fetchData();
-    }, [token]);
+      
+      const response = await fetch(
+        config.apiUrl + config.listQuestionCategoryUrl,
+        requestOptions
+      );
 
-
-    const handleAddCategoryClick = () => {  
-      setIsAddingCategory(true);
-    };
-
-
-    const handleConfirmCategory = async () => {
-        try {
-          if (newCategoryName == null || newCategoryName.trim() == '') {
-            AlertError('Error','Debes ingresar el nombre de la categoria')
-          }else{
-            // Headers para la solicitud POST
-            const myHeaders = new Headers();
-            myHeaders.append('Content-Type', 'application/json');
-            myHeaders.append('Authorization', `Bearer ${token}`);
-
-            const requestOptions = {
-              method: 'POST',
-              headers: myHeaders,
-              body: JSON.stringify({ name: newCategoryName }),
-              redirect: 'follow',
-            };
-
-            const response = await fetch(
-              config.apiUrl + config.createQuestionCategoryUrl,
-              requestOptions
-            );
-
-            // Verificar si la solicitud fue exitosa (código de estado 2xx)
-            if (response.ok) {
-              // Luego de la creación, puedes cerrar el formulario y limpiar el nombre de la nueva categoría
-              setIsAddingCategory(false);
-              setNewCategoryName('');
-              window.location.reload();
-            } else {
-              AlertError('Error','Se presento un error, por favor vuelve a intentar o contacta a soporte')
-            }
-          }
-        } 
-        catch (error) {
+      if (response.status === 401){
+        try{
+          const new_id_token = await refreshToken()
+          sessionStorage.setItem('id_token', new_id_token);
+          await fetchData()
+        }catch (error){
           AlertError('Error','Se presento un error, por favor vuelve a intentar o contacta a soporte')
         }
-    };
+      }
+      
+      const jsonData = await response.json();
+      setCategorys(jsonData);
+      setCategorys_filter(jsonData);
+    } catch (error) {
+      AlertError('Error','Se presento un error, por favor vuelve a intentar o contacta a soporte')
+    }
+  };
+
+  useEffect(() => {
+    // titulo de la pagina
+    document.title = 'Admin';
+    fetchData();
+  }, []);
+
+
+  const handleAddCategoryClick = () => {  
+    setIsAddingCategory(true);
+  };
+
+  //Crear categoria de pregunta
+  const handleConfirmCategory = async () => {
+    try {
+      if (newCategoryName == null || newCategoryName.trim() == '') {
+        AlertError('Error','Debes ingresar el nombre de la categoria')
+      }else{
+
+        const token = sessionStorage.getItem('id_token'); // Obtener el token desde sessionStorage
+        
+        // Headers para la solicitud POST
+        const myHeaders = new Headers();
+        myHeaders.append('Content-Type', 'application/json');
+        myHeaders.append('Authorization', `Bearer ${token}`);
+        
+        const requestOptions = {
+          method: 'POST',
+          headers: myHeaders,
+          body: JSON.stringify({ name: newCategoryName }),
+          redirect: 'follow',
+        };
+        
+        const response = await fetch(
+          config.apiUrl + config.createQuestionCategoryUrl,
+          requestOptions
+        );
+        // Verificar si la solicitud fue exitosa (código de estado 2xx)
+        
+        if (response.ok) {
+          // Luego de la creación, puedes cerrar el formulario y limpiar el nombre de la nueva categoría
+          setIsAddingCategory(false);
+          setNewCategoryName('');
+          window.location.reload();
+        }else if (response.status == 401) {
+          try{
+            const new_id_token = await refreshToken()
+            sessionStorage.setItem('id_token', new_id_token);
+            await handleConfirmCategory()
+          }catch (error){
+            AlertError('Error','Se presento un error, por favor vuelve a intentar o contacta a soporte')
+          }
+        }
+        else {
+          AlertError('Error','Se presento un error, por favor vuelve a intentar o contacta a soporte')
+        }
+      }
+    } 
+    catch (error) {
+      AlertError('Error','Se presento un error, por favor vuelve a intentar o contacta a soporte')
+    }
+  };
+
 
   const handleFilterSearch = (evt) => {
     const categorys_filter = categorys.filter(item => item.name.toLowerCase().includes(evt.target.value.toLowerCase()))

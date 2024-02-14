@@ -9,14 +9,14 @@ const Interview =() =>{
 
     const { refreshToken } = useAuth();
 
-    const token = sessionStorage.getItem('id_token'); // Obtener el token desde sessionStorage
-    const [new_Token, setRefeshToken] = useState('')
-
     const [listInterviews, setListInterviews] = useState([]);
     const [interviewsFilter, setInterviewsFilter] = useState([]); // contiene las entrevistas filtradas por la barra de busqueda
 
     const getInterviews = async () => {
         try{
+
+            const token = sessionStorage.getItem('id_token'); // Obtener el token desde sessionStorage
+
             const myHeaders = new Headers();
             myHeaders.append('accept', 'application/json');
             myHeaders.append('Authorization', `Bearer ${token}`);
@@ -28,25 +28,29 @@ const Interview =() =>{
             const response = await fetch(
                 config.apiUrl + config.listInterviewsUrl, requestOptions
             );
-            if(response.status === 401){
+    
+            if(response.status == 401){
                 try{
-
                     const new_id_token = await refreshToken()
                     sessionStorage.setItem('id_token', new_id_token);
-                    
+                    await getInterviews()
                 }catch (error){
                     AlertError('Error','Se presento un error, por favor vuelve a intentar o contacta a soporte')
                 }
+            }else{
+                const jsonData = await response.json();
+                setListInterviews(jsonData)
+                setInterviewsFilter(jsonData)
             }
-            const jsonData = await response.json();
-            setListInterviews(jsonData)
-            setInterviewsFilter(jsonData)
-        }catch {
+            
+        }catch (error) {
             AlertError('Error','Se presento un error, por favor vuelve a intentar o contacta a soporte')
         }
     };
 
     useEffect(() => {
+        // titulo de la pagina
+        document.title = 'Admin';
         getInterviews();
     },[]);
 
@@ -60,6 +64,8 @@ const Interview =() =>{
             if (newInterviewName == null || newInterviewName.trim() == '') {
                 AlertError('Error','Debes ingresar un nombre para la entrevista')
             }else{
+
+                const token = sessionStorage.getItem('id_token'); // Obtener el token desde sessionStorage
 
                 const myHeaders = new Headers;
                 myHeaders.append('Content-Type', 'application/json');
@@ -86,14 +92,22 @@ const Interview =() =>{
                     window.location.reload();
         
                 }else if(response.status === 401){
-                    refreshToken()
+                    try{
+                        const new_id_token = await refreshToken()
+                        sessionStorage.setItem('id_token', new_id_token);
+
+                        await handleConfirmInterview()
+                        
+                    }catch (error){
+                        AlertError('Error','Se presento un error, por favor vuelve a intentar o contacta a soporte')
+                    }
                 } 
                 else {
                     AlertError('Error','Se presento un error, por favor vuelve a intentar o contacta a soporte')
                 }
             }
 
-        }catch{
+        }catch(error){
             AlertError('Error','Se presento un error, por favor vuelve a intentar o contacta a soporte')
         }
     }

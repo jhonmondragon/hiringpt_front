@@ -1,11 +1,21 @@
 import React from 'react';
 import { Menu } from 'antd';
-import { Link } from 'react-router-dom';
 import logo from '../../assets/images/logo.png'
 
 
 const Header = () => {
 
+    const scrollSection = (sectionId) => {
+        const section = document.getElementById(sectionId);
+
+        if (section){
+            window.scrollTo({
+                behavior: 'smooth',
+                top: section.offsetTop,
+            });
+        }
+    };
+    
     return(
         <div className='flex-center-vertical header-container bg-color-white shadow'>
             <img 
@@ -18,8 +28,10 @@ const Header = () => {
                 breakpoint="lg"
                 style={{ width: '50vw'}}
             >
-                <Menu.Item key="1"><Link to="#section1">Producto</Link></Menu.Item>
-                <Menu.Item key="3"><Link to="#section3">Precios</Link></Menu.Item>
+                <p
+                    onClick={()=>scrollSection('productSection')}
+                    className='cursor-pointer'
+                >Producto</p>
             </Menu>
             <div>
                 <button 

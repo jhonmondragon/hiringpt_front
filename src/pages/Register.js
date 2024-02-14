@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext.js";
 import '../styles/buttons/buttonLogin.css';
@@ -76,6 +76,10 @@ export function Register(){
             alertError('Error','Debes ingresar el nombre de tu compañia')
         }
     }
+
+    useEffect(() => {
+        document.title = 'Registrarse';
+    },[]);
 
     return(
         <div className="full-page-centered">
