@@ -26,6 +26,9 @@ body{
 .txt-black{
     color: #000000;
 }
+.txt-white{
+    color: #ffffff;
+}
 
 .text-align-end{
     text-align: end;
