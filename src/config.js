@@ -52,7 +52,7 @@ const dev = {
 };
   
 const prod = {
-  apiUrl: "http://3.147.71.21:8000/",
+  apiUrl: "https://api.hiringpt.com/",
   registerUrl: "register/", //registra un usuario
   loginUrl: "login/", // permmite logear un usuario
   listUsersCompanyUrl: "user/list/all",
