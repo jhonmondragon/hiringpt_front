@@ -168,10 +168,10 @@ const Process = () => {
             title='Procesos'
             icons={{
                 Add: AddIcon, // boton de agregar
-                Clear: Clear,
                 Delete: DeleteIcon,
                 Check: Check,
                 Search: Search,
+                ResetSearch: Clear,
                 FirstPage: FirstPage,
                 LastPage: LastPage,
                 NextPage: ChevronRight,
@@ -197,7 +197,7 @@ const Process = () => {
                 {
                     icon: AutoGraphIcon,
                     tooltip: 'Analisis',
-                    onClick: (event, rowData) => window.open('process/analytics/' + rowData.id, '_blank')
+                    onClick: (event, rowData) => window.location.href = '/process/analytics/' + rowData.id
                 },
                 {
                     icon: SendIcon,
