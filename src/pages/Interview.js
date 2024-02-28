@@ -139,7 +139,7 @@ const Interview =() =>{
                         className='inpu-search bor-gray-rad block-highlight mg-right-20 fs-20'
                         onChange={handleFilterSearch}
                     />
-                    <div className='btn-black-white with-fit-content'>
+                    <div className='btn-black-white fw-700 flex-center-vertical'>
                         <a onClick={handleAddInterviewClick}>Nueva entrevista</a>
                     </div>
                 </div>
