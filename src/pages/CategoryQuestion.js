@@ -138,7 +138,7 @@ const CategoryQuestion = () => {
             className='inpu-search bor-gray-rad block-highlight mg-right-20 fs-20'
             onChange={handleFilterSearch}
           />
-          <div className='btn-black-white'>
+          <div className='btn-black-white fw-700 flex-center-vertical'>
             <a onClick={handleAddCategoryClick}>Nueva categoria</a>
           </div>
         </div>
