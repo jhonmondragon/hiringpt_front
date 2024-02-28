@@ -17,9 +17,6 @@ function Login(){
 
     const navigate = useNavigate();
 
-    const [error, setError] = useState(false);
-    const [companyName, setCompanyName] = useState('');
-
     const { loginwithGoogle } = useAuth();
 
     function alertError(title, message) {
