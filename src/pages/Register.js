@@ -53,11 +53,12 @@ export function Register(){
                         },
                         body: JSON.stringify(requestBody)
                     });
-                    const response = await response_endpoint_register.text()
-                    
-                    if (response == 'user created successfully'){
 
-                    }else if (response == 'user already exists'){
+                    if (response_endpoint_register.status == 201){
+                        
+                        window.location.href = '/interviews'
+
+                    }else if (response_endpoint_register.status == 409){
                         alertError('Error', 'Ya existe una cuenta con este correo, por favor inicia sesion');
                     }else{
                         alertError('Error', 'Por favor vuelve a intentar, si el error persiste contacta a soporte');
