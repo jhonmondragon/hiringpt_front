@@ -186,9 +186,6 @@ const Process = () => {
                 actionsColumnIndex: -1,
                 pageSizeOptions: [], // Deshabilitar la opción de cambiar el tamaño de página
                 pageSize: 10, // Establecer el tamaño de página predeterminado
-                searchFieldStyle: {
-                    paddingRight: '0px', // Eliminar espacio para el botón de limpiar
-                },
 
             }}
             actions={[
