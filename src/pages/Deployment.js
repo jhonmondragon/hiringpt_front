@@ -12,6 +12,8 @@ import * as XLSX from 'xlsx/xlsx.mjs'; // para procesar excel
 import AlertError from '../components/Alert/AlertError.js';
 import AlertConfirm from '../components/Alert/AlertConfirm.js';
 import { useAuth } from '../context/AuthContext'; // metodos de authentication
+import { saveAs } from 'file-saver'; //descargar archivos
+
 
 
 const Deployment = () => {
@@ -76,12 +78,33 @@ const Deployment = () => {
 
     }
 
+    // Crear la plantilla de cargar usuarios masivos
+    const handleDownloadTemplateCandidates = () => {
+        
+        // Datos de ejemplo (puedes reemplazar esto con tus propios datos)
+        const datos = [
+            ['Nombre del candidato', 'Correo del candidato'],
+        ];
+
+        // Crear un objeto de hoja de cálculo
+        const hojaDeCalculo = XLSX.utils.aoa_to_sheet(datos);
+
+        // Crear un libro de Excel y agregar la hoja de cálculo
+        const libroDeExcel = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(libroDeExcel, hojaDeCalculo, 'Hoja1');
+
+        // Generar el archivo Excel y guardarlo
+        const nombreArchivo = 'plantilla.xlsx';
+        XLSX.writeFile(libroDeExcel, nombreArchivo);
+
+    };
+
     //Procesar archivo excel
 
     const handleFileChange = (e) => {
         const file = e.target.files[0];
         if (file) {
-        readExcel(file);
+            readExcel(file);
         }
     };
 
@@ -89,12 +112,13 @@ const Deployment = () => {
         const reader = new FileReader();
 
         reader.onload = (event) => {
-        const binaryString = event.target.result;
-        const workbook = XLSX.read(binaryString, { type: 'binary' });
-        const sheetName = workbook.SheetNames[0];
-        const sheet = workbook.Sheets[sheetName];
-        const excelData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
-        handleFileUpload(excelData);
+            const binaryString = event.target.result;
+            const workbook = XLSX.read(binaryString, { type: 'binary' });
+            const sheetName = workbook.SheetNames[0];
+            const sheet = workbook.Sheets[sheetName];
+            const excelData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+            console.log(excelData);
+            handleFileUpload(excelData);
         };
 
         reader.readAsBinaryString(file);
@@ -353,15 +377,26 @@ const Deployment = () => {
     
     return (
         <div>
-            <div className='height-10vh center-content-column mg-bt-10'>
+            <div className='center-content-column mg-bt-20 mg-tp-20'>
                 <label className='fw-900 fs-20 mg-bt-10'>Puedes cargar varios candidatos por medio de un Excel</label>
-                <input type="file" accept=".xlsx, .xls" onChange={handleFileChange} className='button_gray shadow fw-900'/>
+                <div>
+                    <button 
+                        onClick={handleDownloadTemplateCandidates}
+                        className='button_gray shadow fw-900 height-fit-content mg-tp-10 mg-right-40'
+                    >Descargar plantilla</button>
+                    <input 
+                        type="file"
+                        accept=".xlsx, .xls"
+                        onChange={handleFileChange}
+                        className='button_gray shadow fw-900 height-fit-content mg-tp-10'    
+                    />
+                </div>
             </div>
-            <div className='center-content-column mg-bt-10'>
+            <div className='center-content-column mg-bt-20'>
                     <button 
                         className='button_gray fw-700'
                         onClick={()=>(window.location.href = '/process')}
-                        >Volver</button>
+                    >Volver</button>
             </div>
             <div>
                 <ThemeProvider theme={theme}>
