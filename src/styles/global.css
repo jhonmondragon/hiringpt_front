@@ -29,6 +29,9 @@ body{
 .txt-white{
     color: #ffffff;
 }
+.txt-red{
+    color: #ef0808;
+}
 
 .text-align-end{
     text-align: end;
@@ -103,6 +106,9 @@ body{
 .mg-right-20{
     margin-right: 20px;
 }
+.mg-right-40{
+    margin-right: 40px;
+}
 .mg-left-20{
     margin-left: 20px;
 }
@@ -131,7 +137,7 @@ body{
     padding-bottom: 10px;
 }
 .pd-10{
-    padding: 10;
+    padding: 10px;
 }
 .pd-right-100{
     padding-right: 100px;
@@ -252,7 +258,6 @@ body{
     background-color: #4caf50;
     color: white;
     border: none;
-    padding: 8px;
     border-radius: 4px;
     cursor: pointer;
 }
@@ -260,7 +265,6 @@ body{
     background-color: #D73333;
     color: white;
     border: none;
-    padding: 8px;
     border-radius: 4px;
     cursor: pointer;
 }
@@ -477,6 +481,3 @@ body{
     font-weight: 700;
 }
 
-.test{
-    background-color: #000000;
-}

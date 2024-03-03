@@ -136,7 +136,7 @@ const UpdateQuestion = () => {
           />
         </label>
         <button 
-          className='button_green with-80vw mg-tp-10 fw-900 shadow'
+          className='button_green with-80vw mg-tp-10 fw-900 pd-10 shadow'
           onClick={handleCreateQuestion}
         >Crear pregunta</button>  
         <button 

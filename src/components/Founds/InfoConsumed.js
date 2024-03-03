@@ -119,10 +119,6 @@ const InfoConsumed = () => {
             value={`$ ${totalFounds.toFixed(2)} USD`}
             className='mg-right-20 fw-500'
           />
-          <Statistic
-            title="Fondos gastados ultimos 6 meses"
-            value={200}
-          />
         </div>
         <button className='button_green mg-tp-20 fw-900 fs-20 shadow'>Recargar creditos</button>
       </div>
