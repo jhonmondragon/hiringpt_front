@@ -15,6 +15,7 @@ import Deployment from './pages/Deployment'
 import Analytics from './pages/Analytics';
 import Founds from './pages/Founds';
 import LandingPage from './pages/LandingPage';
+import VinculateUser from './pages/VinculateUser';
 
 
 function App() {
@@ -34,6 +35,7 @@ function App() {
         <Route path='/recorder/interview/:token' element = {<InterviewRecord/>} />
         <Route path='/process/analytics/:process_id' element = {<Analytics/>} />
         <Route path='/founds' element = {<Founds/>} />
+        <Route path='/vinculate/:code_invitation' element = {<VinculateUser/>} />
         <Route path='/' element = {<LandingPage/>} />
         <Route path='*' element = {<NotFound/>} />
       </Routes>

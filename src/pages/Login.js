@@ -9,6 +9,7 @@ import Swal from 'sweetalert2' // libreria de errores
 import { config } from '../config.js' // Configuracion de los endpoint
 import CardExperience from '../components/Cards/Experience.js'
 import { Link } from 'react-router-dom';
+import AlertError from '../components/Alert/AlertError.js';
 
 
 
@@ -18,14 +19,6 @@ function Login(){
     const navigate = useNavigate();
 
     const { loginwithGoogle } = useAuth();
-
-    function alertError(title, message) {
-        Swal.fire({
-            title: title,
-            text: message,
-            icon: 'error'
-        })
-    }
 
     const handleGoogleSignIn = async () => {
         try{
@@ -50,14 +43,14 @@ function Login(){
             }
 
             if (response_login == 'user not found'){
-                alertError('Error al iniciar sesion','El usuario no existe, por favor registrate')
+                AlertError('Error al iniciar sesion', 'El usuario no existe, por favor registrate')
             }
             if (response_login == 'user blocked'){
-                alertError('Error al iniciar sesion','Por favor contactate con el administrador de tu empresa')
+                AlertError('Error al iniciar sesion','Por favor contactate con el administrador de tu empresa')
             }
 
         }catch(error){
-            alertError('Error al iniciar sesion','Se presento un error, por favor vuelve a intentar o contacta a soporte')
+            AlertError('Error al iniciar sesion','Se presento un error, por favor vuelve a intentar o contacta a soporte')
         }
     }
 

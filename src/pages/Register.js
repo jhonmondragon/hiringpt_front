@@ -5,10 +5,10 @@ import '../styles/buttons/buttonLogin.css';
 import '../styles/global.css';
 import iconGoogle50 from '../assets/icons/iconGoogle50.png';
 import photoCeoHiringpt from '../assets/images/photoCeoHiringpt.jpeg';
-import Swal from 'sweetalert2'
 import { config } from '../config.js'
 import CardExperience from '../components/Cards/Experience.js'
 import { Link } from 'react-router-dom';
+import AlertError from '../components/Alert/AlertError.js';
 
 export function Register(){
 
@@ -19,17 +19,7 @@ export function Register(){
     const [error, setError] = useState(false);
     const [companyName, setCompanyName] = useState('');
 
-    const { loginwithGoogle } = useAuth();
-
-    function alertError(title, message) {
-        Swal.fire({
-            title: title,
-            text: message,
-            icon: 'error'
-        })
-    }
-
-    
+    const { loginwithGoogle } = useAuth();  
 
     const handleGoogleSignUp = async () => {
 
@@ -39,9 +29,10 @@ export function Register(){
                 const idToken = response._tokenResponse.idToken;
     
                 try{
-                    const requestBody = {
+                    const raw = {
                         "user_type": "admin",
-                        "company_name": companyName
+                        "company_name": companyName,
+                        "code_invitation": false
                     }
                     
                     const response_endpoint_register = await fetch( config.apiUrl + config.registerUrl, {
@@ -51,7 +42,7 @@ export function Register(){
                             'Content-Type': 'application/json',
                             'Authorization': `Bearer ${idToken}`
                         },
-                        body: JSON.stringify(requestBody)
+                        body: JSON.stringify(raw)
                     });
 
                     if (response_endpoint_register.status == 201){
@@ -59,22 +50,19 @@ export function Register(){
                         window.location.href = '/interviews'
 
                     }else if (response_endpoint_register.status == 409){
-                        alertError('Error', 'Ya existe una cuenta con este correo, por favor inicia sesion');
+                        AlertError('Error', 'Ya existe una cuenta con este correo, por favor inicia sesion')
                     }else{
-                        alertError('Error', 'Por favor vuelve a intentar, si el error persiste contacta a soporte');
+                        AlertError('Error', 'Se presento un error, por favor vuelve a intentar o contacta a soporte')
                     }
-                    
-
                 }catch(error){
-                    alertError('Error', 'Por favor vuelve a intentar, si el error persiste contacta a soporte');
-                    
+                    AlertError('Error', 'Se presento un error, por favor vuelve a intentar o contacta a soporte')
                 }
             }catch(error){
-                alertError('Error','Lo sentimos, fallo el proceso de login')
+                AlertError('Error', 'Lo sentimos, fallo el proceso de login')
             }
         }else {
             setError(true);
-            alertError('Error','Debes ingresar el nombre de tu compañia')
+            AlertError('Error', 'Debes ingresar el nombre de tu compañia')
         }
     }
 

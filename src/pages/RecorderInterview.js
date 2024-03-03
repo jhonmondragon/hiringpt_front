@@ -161,7 +161,7 @@ const InterviewRecord = () => {
             <h2>{messageStartInterview}</h2>
             {infoInterviews.map(item => (
               <h3 
-                key={item.interview_id}
+                key='interview_name'
                 className='bor-dark-gray-rad cursor-pointer'
                 onClick={() => {
                   setModelInterview(true)

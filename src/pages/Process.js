@@ -88,8 +88,11 @@ const Process = () => {
         try{
 
             if (infoProcess.process == null || infoProcess.process.trim() == '') {
+                
                 AlertError('Error','Debes ingresar el nombre del proceso')
+                
             }else{
+
                 const myHeaders = new Headers;
                 myHeaders.append('Content-Type', 'application/json');
                 myHeaders.append('Authorization', `Bearer ${token}`);
@@ -98,21 +101,25 @@ const Process = () => {
                     "name": infoProcess.process,
                     "details": infoProcess.details
                 });
+
                 const requestOptions = {
                     method: 'POST',
                     headers: myHeaders,
                     body: raw,
                 };
+
                 const response = await fetch(
                     config.apiUrl + config.createProcess,
                     requestOptions
                 );
+
                 if (response.ok) {    
                     window.location.reload();
                 } 
                 else {
                     AlertError('Error','Se presento un error, por favor vuelve a intentar o contacta a soporte')
                 }
+
             }
         }catch(err){
             AlertError('Error','Se presento un error, por favor vuelve a intentar o contacta a soporte')
@@ -186,7 +193,6 @@ const Process = () => {
                 actionsColumnIndex: -1,
                 pageSizeOptions: [], // Deshabilitar la opción de cambiar el tamaño de página
                 pageSize: 10, // Establecer el tamaño de página predeterminado
-
             }}
             actions={[
                 {

@@ -37,19 +37,19 @@ const CardQuestion =({answer,id_question, ask, assistant_ai}) =>{
             <div className="flex-row-space-between">
                 <h2>{ask}</h2>
                 <button 
-                    className='button_red height-fit-content'
+                    className='button_red height-fit-content pd-10'
                     onClick={deleteQuestion}
                     >Eliminar</button>
             </div>
             <div className="">
                 <p className='fs-15'>{answer}</p>
                 {assistant_ai ? (
-                    <p className='button_green with-fit-content fw-700'>Asistencia de ia</p>
+                    <p className='button_green with-fit-content fw-700 pd-10'>Asistencia de ia</p>
                 ) : (
                     null // No muestra nada cuando assistant_ai es false
                 )}
                 {assistant_ai == false ? (
-                    <p className='button_red with-fit-content fw-700'>Sin asistencia de ia</p>
+                    <p className='button_red with-fit-content fw-700 pd-10'>Sin asistencia de ia</p>
                 ) : null}
 
             </div>

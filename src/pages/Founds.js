@@ -17,7 +17,6 @@ const Founds = () => {
             </div>
         </div>
     )
-
 }
 
 export default Founds

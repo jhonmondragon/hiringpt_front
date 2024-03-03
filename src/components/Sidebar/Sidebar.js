@@ -35,7 +35,7 @@ const Sidebar =({focus}) =>{
                 <Link className={`opt-bottom ${focus === 'users' ? 'focus-link' : ''}`} to='/users'>Usuarios</Link>
             </div>
             <div 
-                className='button_red mg-bt-10 fw-700'
+                className='button_red mg-bt-10 fw-700 pd-10'
                 onClick={handleLogOut}
             >
                 <a>Cerrar sesion</a>

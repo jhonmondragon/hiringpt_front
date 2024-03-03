@@ -86,8 +86,8 @@ const CardGroup =({name, id, message, linkEdit, linkDelete, origin}) =>{
                 <p>{message}</p>
             </div>
             <div className='with-150 min-with-150'>
-                <button className='button_green mg-right-20' onClick={handleEditClick}>Editar</button>
-                <button className='button_red' onClick={handleDeleteClick}>Eliminar</button>
+                <button className='button_green mg-right-20 pd-10' onClick={handleEditClick}>Editar</button>
+                <button className='button_red pd-10' onClick={handleDeleteClick}>Eliminar</button>
             </div>
 
             {/* Modal para agregar nueva categoría */}
