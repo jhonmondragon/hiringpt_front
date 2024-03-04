@@ -242,21 +242,6 @@ const InterviewRecord = () => {
                         setStopQuestion(false)
                       }}
                       className='button_gray mg-10 fw-900 fs-20' >Termine la pregunta</button>}
-                    <button
-                      className='mg-10'
-                      onClick={async () => {
-                        // Esperar hasta que mediaBlobUrl esté disponible
-                        while (!mediaBlobUrl) {
-                          await new Promise(resolve => setTimeout(resolve, 100));
-                        }
-                        
-                        // Utilizar mediaBlobUrl directamente para la descarga
-                        setDownloadLink(mediaBlobUrl);
-                        post_response(mediaBlobUrl)
-                      }}
-                    >
-                      Toggle Streaming
-                    </button>
                   </div>
                 </div>
               );
