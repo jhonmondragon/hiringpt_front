@@ -16,7 +16,7 @@ import AlertError from '../components/Alert/AlertError.js';
 const Users = () => {
 
     const token = sessionStorage.getItem('id_token'); // Obtener el token desde sessionStorage
-    
+
     //Crea todas las columnas
     const columns = [
         {
@@ -49,8 +49,12 @@ const Users = () => {
             cellStyle: { 
                 width: '15%' 
             },
+            editable: 'never',
         }
+
     ];
+
+    
 
     //Trae todos los usuarios registrados en la compañia
 
